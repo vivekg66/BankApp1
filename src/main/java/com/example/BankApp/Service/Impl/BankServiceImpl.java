@@ -3,9 +3,11 @@ package com.example.BankApp.Service.Impl;
 import com.example.BankApp.Entity.Bank;
 import com.example.BankApp.Repository.BankRepo;
 import com.example.BankApp.Service.BankService;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class BankServiceImpl implements BankService {
 
     private BankRepo bankRepo;
