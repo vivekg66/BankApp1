@@ -10,11 +10,9 @@ import javax.persistence.*;
 
 @Getter
 @Setter
-@AllArgsConstructor
-@NoArgsConstructor
 @Entity
 @Table(name = "bank")
-public class Bank {
+public class CustomerDetails {
 
 
     @Id
