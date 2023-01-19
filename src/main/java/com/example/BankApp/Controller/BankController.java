@@ -7,9 +7,8 @@ import com.example.BankApp.Service.BankService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -21,16 +20,40 @@ public class BankController {
     private BankService bankService;
 
 
-    @GetMapping("/customers/{id}")
-    ResponseEntity<ResponseMapper> getCustomerById(@PathVariable("id") long id) {
-        ResponseMapper responseMapper = bankService.getCustomerById(id);
+    @GetMapping("/customer/{customerId}")
+    ResponseEntity<ResponseMapper> getCustomerById(@PathVariable("customerId") long customerId) {
+        ResponseMapper responseMapper = bankService.getCustomerById(customerId);
+        //http://localhost:8081/api/address/2
         return ResponseEntity.status(HttpStatus.OK).body(responseMapper);
     }
 
     @GetMapping("/customers")
-    List<CustomerDetails> getAllCustomers() {
+    List<CustomerDetails> getAllCustomers(@RequestParam(name = "customerName") String customerName) {
         List<CustomerDetails> customerDetailsList = bankService.getCustomerList();
         return customerDetailsList;
+    }
+
+
+    @PostMapping("/new/customer")
+    ResponseEntity<ResponseMapper> createNewCustomer(@RequestBody CustomerDetails customerDetails) {
+        ResponseMapper responseMapper = bankService.addNewCustomer(customerDetails);
+        return ResponseEntity.status(HttpStatus.CREATED).body(responseMapper);
+
+    }
+
+    @DeleteMapping("/customer/delete/{id}")
+    public String deleteCustomerById(@PathVariable("id") long id) {
+        bankService.deleteCustomerById(id);
+        return "Customer deleted with id " + id;
+    }
+
+    @PatchMapping("/customer/update/{id}")
+    CustomerDetails updateCustomerById(@RequestBody CustomerDetails customerDetails, @PathVariable(value = "id") long id) {
+       CustomerDetails customerDetails1= bankService.updateCustomerById(id, customerDetails);
+       customerDetails1.setCustomerName(customerDetails1.getCustomerName());
+       customerDetails1.setCustomerEmail(customerDetails1.getCustomerEmail());
+       customerDetails1.setCustomermobileno(customerDetails1.getCustomermobileno());
+        return customerDetails1;
     }
 
 
